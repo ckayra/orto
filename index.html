@@ -56,6 +56,7 @@
             max-height: 650px;
             border: 1px solid #e2e8f0;
             border-radius: 8px;
+            margin-bottom: 30px;
         }
         table {
             width: 100%;
@@ -102,6 +103,40 @@
         .tonico { background-color: #f0fdfa; color: #115e59; border-left: 3px solid #14b8a6; }
         .riposo { color: #94a3b8; font-style: italic; font-weight: normal; }
         span.dose { font-weight: bold; }
+        
+        /* Stili Note di Coltivazione */
+        .info-section {
+            background: #fafafa;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+        .info-section h2 {
+            font-size: 18px;
+            color: #0f172a;
+            border-bottom: 2px solid #cbd5e1;
+            padding-bottom: 8px;
+            margin-top: 0;
+        }
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        @media (max-width: 768px) {
+            .info-grid { grid-template-columns: 1fr; }
+        }
+        .info-card {
+            background: white;
+            padding: 15px;
+            border-radius: 6px;
+            border-left: 4px solid #64748b;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+        .info-card strong { color: #0f172a; display: block; margin-bottom: 5px; font-size: 14px;}
+        .info-card p { margin: 0; font-size: 13px; color: #475569; line-height: 1.5; }
+        .fioritura-highlight { border-left-color: #8b5cf6; background: #f5f3ff; }
     </style>
 </head>
 <body>
@@ -126,6 +161,53 @@
             <tbody id="body-piante">
                 </tbody>
         </table>
+    </div>
+
+    <div class="info-section">
+        <h2>🛠️ Note Speciali di Coltivazione, Potature e Interventi</h2>
+        <div class="info-grid">
+            
+            <div class="info-card fioritura-highlight">
+                <strong>🍇 Glicine (Seconda Fioritura Estiva)</strong>
+                <p>Il glicine può rifiorire tra luglio e agosto sui rami nuovi dell'anno. A <strong>metà/fine luglio</strong> effettua la potatura verde: accorcia drasticamente i lunghi "viticci/tentacoli" vigorosi tagliandoli a 5-6 gemme dalla base (circa 20-30 cm). Evita l'azoto e continua con il Cifo Asso di Fiori (Potassio) per stimolare i boccioli estivi.</p>
+            </div>
+
+            <div class="info-card">
+                <strong>🪓 Gladioli e 🔔 Campanula</strong>
+                <p>Se producono solo foglie, oltre al trattamento radicale con Cifo Asso di Fiori (ricco di P-K) avviato oggi, assicurati che ricevano il <strong>massimo delle ore di sole diretto</strong> possibile. La mezz'ombra accentua l'accumulo di sole foglie a discapito dello stelo fiorale.</p>
+            </div>
+
+            <div class="info-card">
+                <strong>🌹 Rose</strong>
+                <p><strong>Rimozione dello sfiorito:</strong> Taglia regolarmente i fiori appassiti scendendo fino alla prima foglia a 5 foglioline per stimolare costantemente nuovi getti e boccioli. Controlla ogni settimana la pagina inferiore per scovare tempestivamente i focolai di afidi.</p>
+            </div>
+
+            <div class="info-card">
+                <strong>🌸 Azalee e Camelie (Sfiorite)</strong>
+                <p>La fioritura primaverile è terminata. Se necessario, questo è il momento di effettuare una leggera potatura di riordino della forma. <strong>Non toccarle a fine estate/autunno</strong>, poiché in quel periodo stanno già preparando i boccioli invisibili per l'anno prossimo.</p>
+            </div>
+
+            <div class="info-card">
+                <strong>🍅 Pomodori</strong>
+                <p><strong>Sfogliatura e Sfemminellatura:</strong> Rimuovi con regolarità i "cremasti" o "femminelle" (i germogli ascellari che nascono tra il fusto principale e la foglia). Man mano che la pianta cresce, elimina le foglie più basse a contatto con il terreno per ridurre il rischio di peronospora.</p>
+            </div>
+
+            <div class="info-card">
+                <strong>🥒 Zucchine</strong>
+                <p><strong>Pulizia Sanitaria:</strong> Rimuovi regolarmente le foglie basali vecchie che iniziano a ingiallire o che mostrano i primi segni bianchi di oidio. Questo migliora l'aerazione al centro della pianta, favorisce l'accesso degli insetti impollinatori e riduce l'umidità ristagnante.</p>
+            </div>
+
+            <div class="info-card">
+                <strong>🌱 Basilico e Erbe Aromatiche</strong>
+                <p><strong>Cimatura continua:</strong> Non lasciare che il basilico produca la spiga di fiori bianca, altrimenti le foglie diventeranno dure e perderanno l'aroma. Cima costantemente le punte superiori apicali per costringere la piantina a cespugliare e produrre nuove foglie tenere.</p>
+            </div>
+
+            <div class="info-card">
+                <strong>🥔 Patate</strong>
+                <p>Durante la crescita vegetativa (quando le piante saranno alte circa 20 cm), effettua il <strong>rincalzo</strong>, portando della terra fresca al piede della pianta. Questo protegge i tuberi superficiali dalla luce del sole (evitando che diventino verdi e tossici) e aumenta lo spazio di crescita.</p>
+            </div>
+
+        </div>
     </div>
 </div>
 

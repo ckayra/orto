@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tabellone Interattivo Trattamenti Orto-Giardino</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f1f5f9;
+            color: #1e293b;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 100%;
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+        }
+        h1 {
+            color: #0f172a;
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+        .subtitle {
+            color: #64748b;
+            margin-bottom: 20px;
+        }
+        .calculator-box {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .calculator-box label {
+            font-weight: 600;
+        }
+        .calculator-box input {
+            width: 70px;
+            padding: 8px;
+            font-size: 16px;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            text-align: center;
+            font-weight: bold;
+            color: #2563eb;
+        }
+        .table-wrapper {
+            overflow-x: auto;
+            max-height: 650px;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+            text-align: left;
+        }
+        th, td {
+            padding: 10px 12px;
+            border: 1px solid #e2e8f0;
+            min-width: 140px;
+        }
+        th {
+            background: #0f172a;
+            color: white;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        th:first-child, td:first-child {
+            position: sticky;
+            left: 0;
+            background: #f8fafc;
+            font-weight: bold;
+            z-index: 5;
+            min-width: 250px;
+            box-shadow: 2px 0 5px -2px rgba(0,0,0,0.1);
+        }
+        th:first-child {
+            background: #0f172a;
+            z-index: 15;
+        }
+        tr:nth-child(even) td:not(:first-child) {
+            background-color: #f8fafc;
+        }
+        .trattamento {
+            border-radius: 4px;
+            padding: 6px;
+            font-weight: 500;
+        }
+        .urto { background-color: #fee2e2; color: #991b1b; border-left: 3px solid #ef4444; }
+        .spinta { background-color: #f0fdf4; color: #166534; border-left: 3px solid #22c55e; }
+        .scudo { background-color: #fef9c3; color: #854d0e; border-left: 3px solid #eab308; }
+        .tonico { background-color: #f0fdfa; color: #115e59; border-left: 3px solid #14b8a6; }
+        .riposo { color: #94a3b8; font-style: italic; font-weight: normal; }
+        span.dose { font-weight: bold; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Tabellone Dinamico dei Trattamenti (Orto & Giardino)</h1>
+    <p class="subtitle">Pianificazione dal 21 Maggio al 19 Giugno. Cambia i litri d'acqua per ricalcolare tutte le dosi all'istante.</p>
+
+    <div class="calculator-box">
+        <label for="litri">💧 Quantità d'acqua da preparare:</label>
+        <input type="number" id="litri" value="10" min="1" max="100" oninput="ricalcolaDosi()">
+        <span>Litri</span>
+    </div>
+
+    <div class="table-wrapper">
+        <table id="tabella-orto">
+            <thead>
+                <tr id="header-giorni">
+                    <th>Pianta / Essenza</th>
+                    </tr>
+            </thead>
+            <tbody id="body-piante">
+                </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    const ricette = {
+        urto: { nome: "Urto Insetti (Sera)", sapone: 10, piretro: 2, classe: "urto" },
+        spinta: { nome: "Compo Bio Liquido", compo: 6, classe: "spinta" },
+        cifo: { nome: "Cifo Asso di Fiori", cifo: 1, classe: "spinta" },
+        scudoNeem: { nome: "Neem + Zeolite", sapone: 5, neem: 5, zeolite: 12, classe: "scudo" },
+        scudoBic: { nome: "Neem + Bicarbonato", sapone: 5, neem: 5, bicarbonato: 5, classe: "scudo" },
+        scudoZeo: { nome: "Scudo Zeolite", sapone: 5, zeolite: 15, classe: "scudo" },
+        tonico: { nome: "Propoli + Macerato", propoli: 4, macerato: 10, classe: "tonico" },
+        tonicoBoost: { nome: "Propoli + Boost Compo", propoli: 4, macerato: 10, compo: 3, classe: "tonico" },
+        fineMese: { nome: "Propoli + Bicarbonato", propoli: 5, bicarbonato: 5, classe: "tonico" },
+        riposo: { nome: "Sola acqua / Controllo", classe: "riposo" },
+        sottoTerra: { nome: "Sotto terra (Solo umidità)", classe: "riposo" }
+    };
+
+    const piante = [
+        // --- SEZIONE STIMOLO FIORITURA ---
+        { nome: "🍇 Glicine (Stimolo Boccioli)", programma: { 1: "cifo", 5: "cifo", 10: "cifo", 14: "tonico", 16: "cifo", 24: "cifo" } },
+        { nome: "🪓 Gladioli (Solo foglie, sbloccare)", programma: { 1: "cifo", 5: "cifo", 7: "tonico", 10: "cifo", 16: "cifo", 24: "cifo" } },
+        { nome: "🔔 Campanula (Solo foglie, sbloccare)", programma: { 1: "cifo", 5: "cifo", 7: "tonico", 10: "cifo", 16: "cifo", 24: "cifo" } },
+
+        // --- SEZIONE GIARDINO ORNAMENTALE ---
+        { nome: "🌹 Rose (Afidi e Oidio)", programma: { 1: "urto", 5: "scudoNeem", 8: "urto", 11: "scudoBic", 16: "cifo", 18: "scudoZeo", 22: "scudoNeem", 24: "cifo", 26: "fineMese" } },
+        { nome: "🌺 Hibiscus e Piante Fiorite", programma: { 1: "urto", 3: "cifo", 10: "cifo", 14: "tonico", 16: "cifo", 24: "cifo" } },
+        { nome: "🌿 Oleandri", programma: { 1: "urto", 8: "urto", 11: "scudoBic", 18: "scudoZeo", 22: "scudoNeem" } },
+        { nome: "🤍 Calle e Passiflora", programma: { 1: "cifo", 5: "cifo", 10: "cifo", 16: "cifo", 24: "cifo", 26: "fineMese" } },
+        { nome: "🌸 Azalee, Camelie (Sfiorite)", programma: { 3: "spinta", 10: "cifo", 14: "tonico", 24: "cifo" } },
+        
+        // --- SEZIONE ORTO ---
+        { nome: "🌱 Piantine Piccole (Basilico, Mais...)", programma: { 3: "spinta", 7: "tonico", 14: "tonicoBoost", 16: "cifo", 20: "tonico", 22: "scudoNeem", 24: "cifo" } },
+        { nome: "🥒 Zucchine (In produzione)", programma: { 3: "spinta", 5: "scudoNeem", 10: "cifo", 11: "scudoBic", 16: "cifo", 22: "scudoNeem", 26: "fineMese" } },
+        { nome: "🍅 Pomodori, Meloni, Angurie", programma: { 3: "spinta", 5: "scudoNeem", 10: "cifo", 11: "scudoBic", 16: "cifo", 18: "scudoZeo", 22: "scudoNeem" } },
+        { nome: "🥔 Patate (Appena piantate)", programma: { 1: "sottoTerra", 2: "sottoTerra", 3: "sottoTerra", 4: "sottoTerra", 5: "sottoTerra", 6: "sottoTerra", 7: "sottoTerra", 8: "sottoTerra", 9: "sottoTerra", 10: "sottoTerra", 11: "sottoTerra", 12: "sottoTerra", 13: "sottoTerra", 14: "sottoTerra", 15: "sottoTerra", 16: "cifo", 18: "scudoZeo", 22: "scudoNeem" } },
+        { nome: "🥬 Lattuga e Fagiolini", programma: { 7: "tonico", 14: "tonico", 20: "tonico" } },
+        { nome: "🍓 Fragole e Piccoli Frutti", programma: { 3: "spinta", 7: "tonico", 10: "cifo", 14: "tonico", 16: "cifo" } }
+    ];
+
+    function generaCalendario() {
+        const header = document.getElementById("header-giorni");
+        const body = document.getElementById("body-piante");
+        
+        let dataCorrente = new Date(2026, 4, 21); // 21 Maggio 2026
+        
+        for (let i = 1; i <= 30; i++) {
+            let th = document.createElement("th");
+            let giorno = dataCorrente.getDate();
+            let mese = dataCorrente.toLocaleString('it-IT', { month: 'short' });
+            th.innerHTML = `Gg ${i}<br><small>${giorno} ${mese}</small>`;
+            header.appendChild(th);
+            dataCorrente.setDate(dataCorrente.getDate() + 1);
+        }
+
+        piante.forEach(pianta => {
+            let tr = document.createElement("tr");
+            let tdNome = document.createElement("td");
+            tdNome.innerHTML = pianta.nome;
+            tr.appendChild(tdNome);
+
+            for (let i = 1; i <= 30; i++) {
+                let td = document.createElement("td");
+                td.setAttribute("data-giorno", i);
+                td.setAttribute("data-tipo", pianta.programma[i] || "riposo");
+                tr.appendChild(td);
+            }
+            body.appendChild(tr);
+        });
+
+        ricalcolaDosi();
+    }
+
+    function ricalcolaDosi() {
+        const litri = parseFloat(document.getElementById("litri").value) || 1;
+        const celle = document.querySelectorAll("#body-piante td[data-giorno]");
+
+        celle.forEach(cella => {
+            const tipo = cella.getAttribute("data-tipo");
+            const ricetta = ricette[tipo];
+
+            if (!ricetta || tipo === "riposo") {
+                cella.innerHTML = `<div class="trattamento riposo">☕ Sola Acqua</div>`;
+                return;
+            }
+            
+            if (tipo === "sottoTerra") {
+                cella.innerHTML = `<div class="trattamento riposo">🥔 Sotto Terra</div>`;
+                return;
+            }
+
+            let html = `<div class="trattamento ${ricetta.classe}"><strong>${ricetta.nome}</strong><br><small>`;
+            
+            if (ricetta.sapone) html += `• Sapone: <span class="dose">${(ricetta.sapone * litri).toFixed(0)}</span> ml<br>`;
+            if (ricetta.piretro) html += `• Piretro: <span class="dose">${(ricetta.piretro * litri).toFixed(1)}</span> ml<br>`;
+            if (ricetta.neem) html += `• Neem: <span class="dose">${(ricetta.neem * litri).toFixed(1)}</span> ml<br>`;
+            if (ricetta.zeolite) html += `• Zeolite: <span class="dose">${(ricetta.zeolite * litri).toFixed(0)}</span> g<br>`;
+            if (ricetta.bicarbonato) html += `• Bicarb: <span class="dose">${(ricetta.bicarbonato * litri).toFixed(0)}</span> g<br>`;
+            if (ricetta.propoli) html += `• Propoli: <span class="dose">${(ricetta.propoli * litri).toFixed(0)}</span> ml<br>`;
+            if (ricetta.macerato) html += `• Macerato: <span class="dose">${(ricetta.macerato * litri).toFixed(0)}</span> ml<br>`;
+            if (ricetta.compo) html += `• Compo Bio: <span class="dose">${(ricetta.compo * litri).toFixed(0)}</span> ml<br>`;
+            if (ricetta.cifo) html += `• Cifo Asso: <span class="dose">${(ricetta.cifo * litri).toFixed(0)}</span> g<br>`;
+
+            html += `</small></div>`;
+            cella.innerHTML = html;
+        });
+    }
+
+    window.onload = generaCalendario;
+</script>
+
+</body>
+</html>

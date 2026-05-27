@@ -195,22 +195,18 @@
         <span>Litri</span>
     </div>
 
-    <!-- CALENDARIO PRINCIPALE -->
     <div class="table-wrapper">
         <table id="tabella-orto">
             <thead>
                 <tr id="header-giorni">
                     <th>Pianta / Essenza</th>
-                    <!-- Generato da JS -->
-                </tr>
+                    </tr>
             </thead>
             <tbody id="body-piante">
-                <!-- Generato da JS -->
-            </tbody>
+                </tbody>
         </table>
     </div>
 
-    <!-- NUOVA SEZIONE: TABELLA RIASSUNTIVA SALVAVITA -->
     <div class="salvavita-section">
         <h2>🚨 Promemoria Salvavita: Dove Applicare i Trattamenti?</h2>
         <table class="salvavita-table">
@@ -233,9 +229,14 @@
                     <td>Barriera protettiva a lungo termine. Impedisce ai funghi di attecchire e blocca le larve.</td>
                 </tr>
                 <tr>
-                    <td><strong>Tonici</strong> (Propoli + Macerato)</td>
+                    <td><strong>Tonici Standard</strong> (Propoli + Macerato)</td>
                     <td><span class="badge-fogliare">FOGLIARE</span></td>
-                    <td>Stimola il sistema immunitario della pianta, aumentandone la resistenza naturale agli stress.</td>
+                    <td>Stimola il sistema immunitario dall'interno, aumentando la resistenza generale.</td>
+                </tr>
+                <tr>
+                    <td><strong>✨ Alternativa: Tonico Potenziato</strong> (Propoli + Macerato + Zeolite)</td>
+                    <td><span class="badge-fogliare">FOGLIARE</span></td>
+                    <td><strong>Doppio scudo:</strong> Difesa immunitaria interna + barriera minerale esterna antisciame. <br><em>⚠️ Nota: Filtrare benissimo il macerato e agitare continuamente la pompa!</em></td>
                 </tr>
                 <tr>
                     <td><strong>Compo Bio Liquido</strong></td>
@@ -251,7 +252,6 @@
         </table>
     </div>
 
-    <!-- SEZIONE NOTE E POTATURE -->
     <div class="info-section">
         <h2>🛠️ Note Speciali di Coltivazione, Potature e Interventi</h2>
         <div class="info-grid">
@@ -298,7 +298,7 @@
 
             <div class="info-card">
                 <strong>🥔 Patate</strong>
-                <p>Durante la crescita vegetativa (quando le piante saranno alte circa 20 cm), effettua il <strong>rincalzo</strong>, portando della terra fresca al piede della pianta. Questo protegge i tuberi superficiali dalla luce del sole (evitando che diventino verdi e tossici) e aumenta lo spazio di crescita.</p>
+                <p>Durante la crescita vegetativa (quando le piante saranno alte circa 20 cm), effettua il <strong>rincalzo</strong>, portando della terra fresca al piede della pianta. Questo protects i tuberi superficiali dalla luce del sole (evitando che diventino verdi e tossici) e aumenta lo spazio di crescita.</p>
             </div>
 
         </div>
@@ -314,6 +314,7 @@
         scudoBic: { nome: "Neem + Bicarbonato", sapone: 5, neem: 5, bicarbonato: 5, classe: "scudo" },
         scudoZeo: { nome: "Scudo Zeolite", sapone: 5, zeolite: 15, classe: "scudo" },
         tonico: { nome: "Propoli + Macerato", propoli: 4, macerato: 10, classe: "tonico" },
+        tonicoZeo: { nome: "Propoli + Macerato + Zeolite", propoli: 4, macerato: 10, zeolite: 10, classe: "tonico" }, // Nuova Ricetta Alternativa
         tonicoBoost: { nome: "Propoli + Boost Compo", propoli: 4, macerato: 10, compo: 3, classe: "tonico" },
         fineMese: { nome: "Propoli + Bicarbonato", propoli: 5, bicarbonato: 5, classe: "tonico" },
         riposo: { nome: "Sola acqua / Controllo", classe: "riposo" },
@@ -322,16 +323,16 @@
 
     const piante = [
         // --- SEZIONE STIMOLO FIORITURA ---
-        { nome: "🍇 Glicine (Stimolo Boccioli)", programma: { 1: "cifo", 9: "cifo", 14: "tonico", 17: "cifo", 25: "cifo" } },
-        { nome: "🪓 Gladioli (Solo foglie, sbloccare)", programma: { 1: "cifo", 7: "tonico", 9: "cifo", 17: "cifo", 25: "cifo" } },
-        { nome: "🔔 Campanula (Solo foglie, sbloccare)", programma: { 1: "cifo", 7: "tonico", 9: "cifo", 17: "cifo", 25: "cifo" } },
+        { nome: "🍇 Glicine (Stimolo Boccioli)", programma: { 1: "cifo", 9: "cifo", 14: "tonicoZeo", 17: "cifo", 25: "cifo" } },
+        { nome: "🪓 Gladioli (Solo foglie, sbloccare)", programma: { 1: "cifo", 7: "tonicoZeo", 9: "cifo", 17: "cifo", 25: "cifo" } },
+        { nome: "🔔 Campanula (Solo foglie, sbloccare)", programma: { 1: "cifo", 7: "tonicoZeo", 9: "cifo", 17: "cifo", 25: "cifo" } },
 
         // --- SEZIONE GIARDINO ORNAMENTALE ---
         { nome: "🌹 Rose (Afidi e Oidio)", programma: { 1: "urto", 5: "scudoNeem", 8: "urto", 11: "scudoBic", 18: "scudoZeo", 22: "scudoNeem", 26: "fineMese" } },
-        { nome: "🌺 Hibiscus e Piante Fiorite", programma: { 1: "urto", 9: "cifo", 14: "tonico", 25: "cifo" } },
+        { nome: "🌺 Hibiscus e Piante Fiorite", programma: { 1: "urto", 9: "cifo", 14: "tonicoZeo", 25: "cifo" } },
         { nome: "🌿 Oleandri", programma: { 1: "urto", 8: "urto", 11: "scudoBic", 18: "scudoZeo", 22: "scudoNeem" } },
         { nome: "🤍 Calle e Passiflora", programma: { 1: "cifo", 9: "cifo", 17: "cifo", 25: "cifo", 26: "fineMese" } },
-        { nome: "🌸 Azalee, Camelie (Sfiorite)", programma: { 1: "spinta", 10: "cifo", 18: "tonico", 26: "fineMese" } },
+        { nome: "🌸 Azalee, Camelie (Sfiorite)", programma: { 1: "spinta", 10: "cifo", 18: "tonicoZeo", 26: "fineMese" } },
         
         // --- SEZIONE ORTO ---
         { nome: "🌱 Piantine Piccole (Basilico, Mais...)", programma: { 1: "spinta", 7: "tonico", 14: "tonicoBoost", 20: "tonico", 22: "scudoNeem", 25: "cifo" } },

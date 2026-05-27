@@ -28,28 +28,41 @@
             color: #64748b;
             margin-bottom: 20px;
         }
-        .calculator-box {
+        .controls-container {
             background: #f8fafc;
             border: 1px solid #e2e8f0;
             padding: 15px;
             border-radius: 8px;
             margin-bottom: 20px;
-            display: inline-flex;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 25px;
+        }
+        .calculator-box, .filter-box {
+            display: flex;
             align-items: center;
             gap: 10px;
         }
-        .calculator-box label {
+        .controls-container label {
             font-weight: 600;
         }
-        .calculator-box input {
-            width: 70px;
+        .controls-container input, .controls-container select {
             padding: 8px;
-            font-size: 16px;
+            font-size: 15px;
             border: 1px solid #cbd5e1;
             border-radius: 6px;
-            text-align: center;
             font-weight: bold;
             color: #2563eb;
+            background: white;
+        }
+        .controls-container input {
+            width: 70px;
+            text-align: center;
+        }
+        .controls-container select {
+            width: 210px;
+            cursor: pointer;
         }
         .table-wrapper {
             overflow-x: auto;
@@ -187,12 +200,21 @@
 
 <div class="container">
     <h1>Tabellone Dinamico dei Trattamenti (Orto & Giardino)</h1>
-    <p class="subtitle">Pianificazione dal 21 Maggio al 19 Giugno. Cambia i litri d'acqua per ricalcolare tutte le dosi all'istante.</p>
+    <p class="subtitle">Pianificazione dal 21 Maggio al 19 Giugno. Gestisci litri e scadenze giornaliere in un click.</p>
 
-    <div class="calculator-box">
-        <label for="litri">💧 Quantità d'acqua da preparare:</label>
-        <input type="number" id="litri" value="10" min="1" max="100" oninput="ricalcolaDosi()">
-        <span>Litri</span>
+    <div class="controls-container">
+        <div class="calculator-box">
+            <label for="litri">💧 Quantità d'acqua da preparare:</label>
+            <input type="number" id="litri" value="10" min="1" max="100" oninput="ricalcolaDosi()">
+            <span>Litri</span>
+        </div>
+        
+        <div class="filter-box">
+            <label for="filtro-giorno">📅 Filtra per data specifica:</label>
+            <select id="filtro-giorno" onchange="applicaFiltroGiorno()">
+                <option value="all">👁️ Mostra l'intero mese</option>
+                </select>
+        </div>
     </div>
 
     <div class="table-wrapper">
@@ -221,7 +243,7 @@
                 <tr>
                     <td><strong>Urto Insetti</strong> (Sapone + Piretro)</td>
                     <td><span class="badge-fogliare">FOGLIARE (Sera)</span></td>
-                    <td>Insetticida abbattente fulmineo. Elimina afidi, tripidi e zanzare per contatto diretto.</td>
+                    <td>Insetticida abbattente fulmineo. Elimina afidi, tripidi e zanzare per contatto directo.</td>
                 </tr>
                 <tr>
                     <td><strong>Scudi</strong> (Neem + Zeolite / Bicarbonato)</td>
@@ -236,7 +258,7 @@
                 <tr>
                     <td><strong>✨ Alternativa: Tonico Potenziato</strong> (Propoli + Macerato + Zeolite)</td>
                     <td><span class="badge-fogliare">FOGLIARE</span></td>
-                    <td><strong>Doppio scudo:</strong> Difesa immunitaria interna + barriera minerale esterna antisciame. <br><em>⚠️ Nota: Filtrare benissimo il macerato e agitare continuamente la pompa!</em></td>
+                    <td><strong>Doppio scudo:</strong> Difesa immunitaria interna + barriera minerale esterna antisciame. <br><em>⚠️ Nota: Filtrare benissimo il macerato e agitare continuamente la pompa! Idoneo anche per Pomodori.</em></td>
                 </tr>
                 <tr>
                     <td><strong>Compo Bio Liquido</strong></td>
@@ -298,7 +320,7 @@
 
             <div class="info-card">
                 <strong>🥔 Patate</strong>
-                <p>Durante la crescita vegetativa (quando le piante saranno alte circa 20 cm), effettua il <strong>rincalzo</strong>, portando della terra fresca al piede della pianta. Questo protects i tuberi superficiali dalla luce del sole (evitando che diventino verdi e tossici) e aumenta lo spazio di crescita.</p>
+                <p>Durante la crescita vegetativa (quando le piante saranno alte circa 20 cm), effettua il <strong>rincalzo</strong>, portando della terra fresca al piede della pianta. Questo protegge i tuberi superficiali dalla luce del sole (evitando che diventino verdi e tossici) e aumenta lo spazio di crescita.</p>
             </div>
 
         </div>
@@ -314,7 +336,7 @@
         scudoBic: { nome: "Neem + Bicarbonato", sapone: 5, neem: 5, bicarbonato: 5, classe: "scudo" },
         scudoZeo: { nome: "Scudo Zeolite", sapone: 5, zeolite: 15, classe: "scudo" },
         tonico: { nome: "Propoli + Macerato", propoli: 4, macerato: 10, classe: "tonico" },
-        tonicoZeo: { nome: "Propoli + Macerato + Zeolite", propoli: 4, macerato: 10, zeolite: 10, classe: "tonico" }, // Nuova Ricetta Alternativa
+        tonicoZeo: { nome: "Propoli + Macerato + Zeolite", propoli: 4, macerato: 10, zeolite: 10, classe: "tonico" }, 
         tonicoBoost: { nome: "Propoli + Boost Compo", propoli: 4, macerato: 10, compo: 3, classe: "tonico" },
         fineMese: { nome: "Propoli + Bicarbonato", propoli: 5, bicarbonato: 5, classe: "tonico" },
         riposo: { nome: "Sola acqua / Controllo", classe: "riposo" },
@@ -337,7 +359,7 @@
         // --- SEZIONE ORTO ---
         { nome: "🌱 Piantine Piccole (Basilico, Mais...)", programma: { 1: "spinta", 7: "tonico", 14: "tonicoBoost", 20: "tonico", 22: "scudoNeem", 25: "cifo" } },
         { nome: "🥒 Zucchine (In produzione)", programma: { 1: "spinta", 5: "scudoNeem", 10: "cifo", 11: "scudoBic", 19: "cifo", 22: "scudoNeem", 26: "fineMese" } },
-        { nome: "🍅 Pomodori, Meloni, Angurie", programma: { 1: "spinta", 5: "scudoNeem", 10: "cifo", 11: "scudoBic", 18: "scudoZeo", 22: "scudoNeem", 26: "cifo" } },
+        { nome: "🍅 Pomodori, Meloni, Angurie", programma: { 1: "spinta", 5: "scudoNeem", 10: "cifo", 11: "scudoBic", 14: "tonicoZeo", 18: "scudoZeo", 22: "scudoNeem", 26: "cifo" } }, 
         { nome: "🥔 Patate (Appena piantate)", programma: { 1: "sottoTerra", 2: "sottoTerra", 3: "sottoTerra", 4: "sottoTerra", 5: "sottoTerra", 6: "sottoTerra", 7: "sottoTerra", 8: "sottoTerra", 9: "sottoTerra", 10: "sottoTerra", 11: "sottoTerra", 12: "sottoTerra", 13: "sottoTerra", 14: "sottoTerra", 15: "sottoTerra", 16: "cifo", 18: "scudoZeo", 22: "scudoNeem" } },
         { nome: "🥬 Lattuga e Fagiolini", programma: { 7: "tonico", 14: "tonico", 20: "tonico" } },
         { nome: "🍓 Fragole e Piccoli Frutti", programma: { 1: "spinta", 7: "tonico", 11: "cifo", 16: "tonico", 24: "cifo" } }
@@ -346,15 +368,25 @@
     function generaCalendario() {
         const header = document.getElementById("header-giorni");
         const body = document.getElementById("body-piante");
+        const filtroSelect = document.getElementById("filtro-giorno");
         
         let dataCorrente = new Date(2026, 4, 21); // 21 Maggio 2026
         
         for (let i = 1; i <= 30; i++) {
             let th = document.createElement("th");
             let giorno = dataCorrente.getDate();
-            let mese = dataCorrente.toLocaleString('it-IT', { month: 'short' });
-            th.innerHTML = `Gg ${i}<br><small>${giorno} ${mese}</small>`;
+            let meseLabel = dataCorrente.toLocaleString('it-IT', { month: 'short' });
+            let meseIntero = dataCorrente.toLocaleString('it-IT', { month: 'long' });
+            
+            th.innerHTML = `Gg ${i}<br><small>${giorno} ${meseLabel}</small>`;
+            th.setAttribute("data-col-giorno", i); // Attributo per nascondere la colonna intestazione
             header.appendChild(th);
+
+            let opt = document.createElement("option");
+            opt.value = i;
+            opt.textContent = `${giorno} ${meseIntero.charAt(0).toUpperCase() + meseIntero.slice(1)}`;
+            filtroSelect.appendChild(opt);
+
             dataCorrente.setDate(dataCorrente.getDate() + 1);
         }
 
@@ -408,6 +440,54 @@
 
             html += `</small></div>`;
             cella.innerHTML = html;
+        });
+    }
+
+    // FUNZIONE FILTRO AGGIORNATA: Filtra RIGHE (Piante attive) + COLONNE (Solo data selezionata)
+    function applicaFiltroGiorno() {
+        const giornoScelto = document.getElementById("filtro-giorno").value;
+        const righe = document.querySelectorAll("#body-piante tr");
+        const thColonne = document.querySelectorAll("#header-giorni th[data-col-giorno]");
+
+        // 1. GESTIONE DELLE COLONNE DELL'INTESTAZIONE (THEAD)
+        thColonne.forEach(th => {
+            const colGiorno = th.getAttribute("data-col-giorno");
+            if (giornoScelto === "all" || colGiorno === giornoScelto) {
+                th.style.display = ""; // Mostra la colonna se coincide o se l'utente vuole vedere tutto
+            } else {
+                th.style.display = "none"; // Nascondi le altre colonne temporaneamente
+            }
+        });
+
+        // 2. GESTIONE DELLE RIGHE E DELLE CELLE DEL CORPO (TBODY)
+        righe.forEach(riga => {
+            if (giornoScelto === "all") {
+                riga.style.display = ""; // Ripristina tutte le piante visibili
+                // Ripristina la visibilità di tutte le celle interne dei giorni
+                riga.querySelectorAll("td[data-giorno]").forEach(td => td.style.display = "");
+                return;
+            }
+
+            // Isola il comportamento sul giorno selezionato
+            const cellaGiorno = riga.querySelector(`td[data-giorno="${giornoScelto}"]`);
+            const tipoTrattamento = cellaGiorno ? cellaGiorno.getAttribute("data-tipo") : "riposo";
+
+            // Se c'è un lavoro da fare in quel giorno esatto, mantieni la riga della pianta aperta
+            if (tipoTrattamento !== "riposo" && tipoTrattamento !== "sottoTerra") {
+                riga.style.display = ""; 
+                
+                // Mostra SOLO la cella del giorno selezionato e nascondi le altre 29 della stessa riga
+                riga.querySelectorAll("td[data-giorno]").forEach(td => {
+                    if (td.getAttribute("data-giorno") === giornoScelto) {
+                        td.style.display = "";
+                    } else {
+                        td.style.display = "none";
+                    }
+                });
+            } else {
+                // Oggi questa pianta non ha compiti, nascondi l'intera riga
+                riga.style.display = "none"; 
+            }
         });
     }
 
